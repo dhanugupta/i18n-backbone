@@ -1,0 +1,9 @@
+{
+    "field": {
+        "emailEmail": "email is empty",
+        "emailInvalid": "please enter the email."
+    },
+   "transactional":{
+       "PAY-300": "oops message"
+    }	
+}
