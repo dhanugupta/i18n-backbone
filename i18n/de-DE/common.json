@@ -1,0 +1,7 @@
+{
+    "button": {
+        "continue": "Weiter",
+        "contiue_plural": "Weiter {{count}}"
+    },
+    "welcome":"Herzlich willkommen"
+}

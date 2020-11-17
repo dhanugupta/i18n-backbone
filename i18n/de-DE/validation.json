@@ -1,0 +1,9 @@
+{
+    "field": {
+        "firstnameEmpty": "Geben Sie Ihren Vornamen ein.",
+        "defaultError": "Ein Fehler ist aufgetreten. Bitte die hervorgehobenen Daten bearbeiten."
+    },
+   "transactional":{
+       "PAY-300": "Ihre Anfrage konnte leider nicht bearbeitet werden. Prüfen Sie, ob die eingegebenen Daten zutreffend sind, versuchen Sie eine andere Karte oder kontaktieren Sie Ihr Finanzinstitut, um weitere Informationen zu erhalten."
+    }	
+}

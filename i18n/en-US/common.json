@@ -1,0 +1,7 @@
+{
+    "button": {
+        "continue": "continue",
+        "continue_plural": "continue {{count}}"
+    },
+    "welcome":"welcome"
+}
