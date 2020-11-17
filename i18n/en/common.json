@@ -1,7 +1,0 @@
-{
-    "button": {
-        "save": "save {{count}} change",
-        "save_plural": "save {{count}} changes"
-    },
-    "title":"common title"
-}
