@@ -1,0 +1,117 @@
+<html>
+<head>
+ <link rel="shortcut icon" href="https://github.com/fluidicon.png" />
+  <meta charset=utf-8>
+  <title>i18next Solution for jquery|backbone</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/19.8.3/i18next.min.js" integrity="sha512-N6eollWeA1/OR6va4JwSaKq7wBQHeT56cSgs2s/Ewjon374GiPXsiVgC1TT4CRvke9JgeUhAu7n7FlRgeTGojQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js" integrity="sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==" crossorigin="anonymous"></script>
+  <script src="./src/scripts/i18nextHttpBackend.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js" integrity="sha512-wBiNJt1JXeA/ra9F8K2jyO4Bnxr0dRPsy7JaMqSlxqTjUGHe1Z+Fm5HMjCWqkIYvp/oCbdJEivZ5pLvAtK0csQ==" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js" integrity="sha512-9EgQDzuYx8wJBppM4hcxK8iXc5a1rFLp/Chug4kIcSWRDEgjMiClF8Y3Ja9/0t8RDDg19IfY5rs6zaPS9eaEBw==" crossorigin="anonymous"></script>
+</head>
+
+    <body>
+        <div class="payment-module"></div>
+    </body>
+    <script id="payment-module" type="text/template">
+      <h1>i18n : information: With Merge Technique</h1>
+      <p>
+      <label>Client Level Overide</label> - <a  href="#" data-i18n="[html]button.continue">Testing</a><br />
+      <label>Client Level Overide with plural</label> - <a  href="#" data-i18n="[html]button.continue_plural">Testing</a><br />
+      <label>Welcome</label> - <a  href="#" data-i18n="[html]welcome">Testing</a><br />
+      <label>validation error</label> - <a  href="#" data-i18n="[html]validation:field.defaultError">FIELD ERROR</a>
+    </p>
+    </script>
+
+    <script type="text/javascript">
+         var PaymentModule = Backbone.View.extend({
+               initialize: function() {},
+                el: ".payment-module",
+                events: {
+                },
+                render: function() {
+                   var itemTemplate = $("#payment-module").html();
+                 var htmlString = _.template(itemTemplate)({});
+		              this.$el.html(htmlString);
+                  this.$el.localize({"count":"10"});
+                return this;
+                }
+           });
+           var getUrlParams = function(url) {
+        var params = {};
+        var parser = document.createElement('a');
+        parser.href = url;
+        var query = parser.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if(pair[0]){
+                params[pair[0]] = pair[1] === undefined ? undefined : decodeURIComponent(pair[1]);
+            }
+        }
+        params["protocol"] = parser.protocol;
+        params["hostname"] = parser.hostname;
+        params["pathname"] = parser.pathname;
+        params["port"] = parser.port;
+        params["search"] = parser.search;
+        return params;
+    }
+
+    function renderModule(){
+      var paymentView = new PaymentModule();
+      paymentView.render();
+    }
+        $(function(){
+          var qObj = getUrlParams(window.document.location);
+          var lng = "en-US";
+          if(qObj.lng !== undefined){
+              lng = qObj.lng;
+          }
+          // use plugins and options as needed, for options, detail see
+      // http://i18next.com/docs/
+      // common, validation, checkout, confirmation
+      // if client "wallstreet" wants to override button.save to ABC to "en" lng
+      // "en-US" -> "wallstreet" <client name>_common.json -> wallstreet_common.json
+      i18next
+        .use(i18nextHttpBackend)
+        .init({
+        lng: lng, // evtl. use language-detector https://github.com/i18next/i18next-browser-languageDetector
+        fallbackLng: lng,
+        fallbackNS: false,
+          debug: true,
+          load: 'currentOnly',
+          ns: ['common','validation'],
+          defaultNS: 'common',
+          backend: {
+            // load from i18next-gitbook repo
+            // https://raw.githubusercontent.com/dhanugupta/i18n-backbone/master/i18n/en-US/common.json
+            loadPath: 'https://raw.githubusercontent.com/dhanugupta/i18n-backbone/master/i18n/{{lng}}/{{ns}}.json',
+            crossDomain: true
+          }
+      }, function(err, t) {
+        // for options see
+        // https://github.com/i18next/jquery-i18next#initialize-the-plugin
+        jqueryI18next.init(i18next, $);
+        // override the resource bundle async
+        // trigger this condition only if, there is any "client" specific properties set
+        // in resource bundle
+         //var client = "wallstreet_common";
+        if(qObj.client !== undefined) {
+          var client = qObj.client+"_common";
+        i18next.loadNamespaces([client],function(){
+          i18next.addResourceBundle(lng, 'common',
+          i18next.getResourceBundle(lng,client),true,true);
+          // start localizing, details:
+          // https://github.com/i18next/jquery-i18next#usage-of-selector-function
+          renderModule();
+        });
+      } else {
+        renderModule();
+      }
+      });
+        });
+    </script>
+
+</html>
+
