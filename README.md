@@ -36,6 +36,13 @@ Integration of i18next intl lib
  ```
  we can use mulitple notation: helps in SEO for image tags or a href.
  
+ ```
+ index.html
+ index.html?client=wallstreet&lng=de-DE
+ index.html?lng=de-DE
+ 
+ ```
+ 
  Hope this solution help in your coding !! Happy Coding !! 
  
  Feel free to use
