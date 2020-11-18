@@ -31,7 +31,9 @@ Integration of i18next intl lib
  ```
  
  ### how to use
+ ```
  <a  href="#" data-i18n="[title]button.continue;[html]button.continue">Testing</a>
+ ```
  we can use mulitple notation: helps in SEO for image tags or a href.
  
  Hope this solution help in your coding !! Happy Coding !! 
